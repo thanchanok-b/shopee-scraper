@@ -23,6 +23,7 @@ Repository นี้ประกอบด้วย Scraper สองส่วน
 ```bash
 pip install playwright pandas nest-asyncio
 playwright install chromium
+```
 
 ### 3. การเตรียมเบราว์เซอร์ Chrome สำหรับโหมด CDP
 
