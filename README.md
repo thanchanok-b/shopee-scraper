@@ -40,7 +40,7 @@ playwright install chromium
     ```
     *(โปรดตรวจสอบ Path ของ chrome.exe บนเครื่องของคุณว่าถูกต้อง)*
 3.  กด **Next**
-4.  ตั้งชื่อ Shortcut เช่น **`Chrome Playwright 9222`**
+4.  ตั้งชื่อ Shortcut เช่น **`chrome-debug-mode`**
 5.  กด **Finish**
 6.  → Chrome จะเปิดพร้อม `--remote-debugging-port=9222` ให้เลย
 
