@@ -1,128 +1,129 @@
 # 🛍️ Shopee Multi-Scraper (Playwright/CDP)
 
-เครื่องมือ Python สำหรับดึง (Scrape) ข้อมูลจาก Shopee Thailand โดยใช้วิธี DOM/UI interaction ร่วมกับไลบรารี **Playwright** และการเชื่อมต่อผ่าน Chrome DevTools Protocol (CDP) เพื่อความรวดเร็วและประสิทธิภาพ
+A Python tool for scraping data from Shopee Thailand using DOM/UI interaction combined with **Playwright** and Chrome DevTools Protocol (CDP) connection for speed and efficiency.
 
-Repository นี้ประกอบด้วย Scraper สองส่วนหลัก:
+This repository consists of two main scrapers:
 
-1.  **Product Scraper:** ดึงรายการสินค้าทั้งหมดจาก URL ร้านค้า (Shop URL)
-2.  **Review Scraper:** ดึงความคิดเห็น (Reviews) จาก URL สินค้าเฉพาะเจาะจง (Product URL)
+1.  **Product Scraper:** Extracts all product listings from a Shop URL.
+2.  **Review Scraper:** Extracts user reviews from specific Product URLs.
 
 ---
 
-## ⚙️ การตั้งค่าและการติดตั้ง
+## ⚙️ Setup and Installation
 
-### 1. ความต้องการของระบบ (Prerequisites)
+### 1. Prerequisites
 
 * Python 3.8+
-* Google Chrome Browser (สำหรับรันในโหมด Debug/CDP)
+* Google Chrome Browser (Required for running in Debug/CDP mode)
 
-### 2. การติดตั้งไลบรารี Python
+### 2. Install Python Libraries
 
-ติดตั้งไลบรารีที่จำเป็นโดยใช้ pip:
+Install the required libraries using pip:
 
 ```bash
 pip install playwright pandas nest-asyncio
 playwright install chromium
 ```
 
-### 3. การเตรียมเบราว์เซอร์ Chrome สำหรับโหมด CDP
+### 3. Prepare Chrome Browser for CDP Mode
 
-สคริปต์นี้ต้องเชื่อมต่อกับเบราว์เซอร์ Chrome ที่เปิดอยู่ผ่าน Chrome DevTools Protocol (CDP) ที่พอร์ต **9222** คุณต้องเปิด Chrome ในโหมด Debugging/CDP ก่อนรันสคริปต์ **(ห้ามปิดหน้าต่าง Chrome นี้ในขณะที่สคริปต์กำลังทำงาน)**
+This script requires a connection to an active Chrome instance via Chrome DevTools Protocol (CDP) on port **9222**. You must launch Chrome in Debugging/CDP mode before running the script **(Do not close this Chrome window while the script is running).**
 
-คุณสามารถเลือกวิธีใดวิธีหนึ่งด้านล่างนี้เพื่อเปิด Chrome ในโหมดที่จำเป็น:
+Choose one of the methods below to launch Chrome in the required mode:
 
-#### 🟢 วิธีที่ 1: สร้าง Shortcut บน Desktop (แนะนำสำหรับ Windows)
+#### 🟢 Method 1: Create a Desktop Shortcut (Recommended for Windows)
 
-1.  คลิกขวาบน **Desktop → New → Shortcut**
-2.  ในช่อง **Type the location of the item** ให้คัดลอกข้อความนี้ไปใส่ทั้งบรรทัด:
+1.  Right-click on **Desktop → New → Shortcut**.
+2.  In the **Type the location of the item** field, paste the following line entirely:
     ```
     "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --user-data-dir="C:\chrome_playwright_profile"
     ```
-    *(โปรดตรวจสอบ Path ของ chrome.exe บนเครื่องของคุณว่าถูกต้อง)*
-3.  กด **Next**
-4.  ตั้งชื่อ Shortcut เช่น **`chrome-debug-mode`**
-5.  กด **Finish**
-6.  → Chrome จะเปิดพร้อม `--remote-debugging-port=9222` ให้เลย
+    *(Please verify that the path to chrome.exe is correct for your system)*.
+3.  Click **Next**.
+4.  Name the shortcut **`chrome-debug-mode`**.
+5.  Click **Finish**.
+6.  → Double-click the shortcut to open Chrome with `--remote-debugging-port=9222` enabled.
 
-#### 🔵 วิธีที่ 2: สร้างไฟล์ .bat ไว้ดับเบิลคลิก (แนะนำสำหรับ Windows)
+#### 🔵 Method 2: Create a .bat File (Recommended for Windows)
 
-1.  เปิดโปรแกรม **Notepad**
-2.  ใส่เนื้อหาดังนี้:
+1.  Open **Notepad**.
+2.  Paste the following content:
     ```bash
     @echo off
     "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --user-data-dir="C:\chrome_playwright_profile"
     ```
-3.  กด **File → Save As…**
-4.  ตั้งชื่อไฟล์ เช่น **`start_chrome_9222.bat`**
-5.  เปลี่ยน **Save as type** เป็น **`All Files (*.*)`**
-6.  ดับเบิลคลิกไฟล์ `.bat` เพื่อเปิด Chrome ในโหมด Debugging
+    *(Please verify that the path to chrome.exe is correct for your system)*.
+3.  Click **File → Save As…**.
+4.  Name the file **`start_chrome_9222.bat`**.
+5.  Change **Save as type** to **`All Files (*.*)`**.
+6.  Double-click the `.bat` file to launch Chrome in Debugging mode.
 
 ---
 
-## 🚀 การใช้งาน Scraper แต่ละส่วน
+## 🚀 Usage
 
-เนื่องจากไฟล์เป็น **Jupyter Notebook (.ipynb)** แนะนำให้เปิดผ่าน VS Code หรือ Jupyter Notebook แล้วกดรันทีละ Cell
+Since the files are **Jupyter Notebooks (.ipynb)**, it is recommended to open them using VS Code or Jupyter Notebook and run the cells sequentially.
 
-### 1. 📋 Product Scraper (ดึงรายการสินค้า)
+### 1. 📋 Product Scraper (Scrape Items)
 
-* **ไฟล์:** `shopee-multi-product-scraper.ipynb`
-* **วัตถุประสงค์:** ดึงรายการสินค้าทั้งหมดจากร้านค้า (Shop URL)
-* **วิธีใช้งาน:**
-    1. เปิดไฟล์ `shopee-multi-product-scraper.ipynb`
-    2. แก้ไขตัวแปร `SHOP_URLS` ใน Cell แรกให้เป็นลิสต์ร้านค้าที่ต้องการ
-    3. กด **Run All** หรือรันทีละ Cell
-* **ผลลัพธ์:** บันทึกเป็นไฟล์ Excel ชื่อ `shopee_products_[timestamp].xlsx`
+* **File:** `shopee-multi-product-scraper.ipynb`
+* **Objective:** Scrape all product listings from a Shop URL.
+* **How to use:**
+    1.  Open `shopee-multi-product-scraper.ipynb`.
+    2.  Edit the `SHOP_URLS` variable in the first cell to include your target shop URLs.
+    3.  Click **Run All** or run cell by cell.
+* **Output:** Saves as an Excel file named `shopee_products_[timestamp].xlsx`.
 
-### 2. 💬 Review Scraper (ดึงความคิดเห็น)
+### 2. 💬 Review Scraper (Scrape Comments)
 
-* **ไฟล์:** `shopee-reviews-scraper.ipynb`
-* **วัตถุประสงค์:** ดึงความคิดเห็น (Reviews) จาก URL สินค้าที่ระบุ
-* **วิธีใช้งาน:**
-    1. เปิดไฟล์ `shopee-reviews-scraper.ipynb`
-    2. แก้ไขตัวแปร `PRODUCTS_URLS` ให้เป็นลิสต์สินค้าที่ต้องการดึงรีวิว
-    3. กด **Run All** หรือรันทีละ Cell
-* **ผลลัพธ์:** บันทึกเป็นไฟล์ Excel ชื่อ `shopee_reviews_[timestamp].xlsx`
-
----
-
-## 🛠️ โครงสร้างไฟล์ใน Repository
-
-| ชื่อไฟล์ | คำอธิบาย |
-| :--- | :--- |
-| `shopee-multi-product-scraper.ipynb` | Notebook สำหรับดึงรายการสินค้าจาก Shop URL (มีฟังก์ชัน save Excel) |
-| `shopee-reviews-scraper.ipynb` | Notebook สำหรับดึงความคิดเห็นจาก Product URL |
+* **File:** `shopee-reviews-scraper.ipynb`
+* **Objective:** Scrape user reviews from specific Product URLs.
+* **How to use:**
+    1.  Open `shopee-reviews-scraper.ipynb`.
+    2.  Edit the `PRODUCTS_URLS` variable to include your target product URLs.
+    3.  Click **Run All** or run cell by cell.
+* **Output:** Saves as an Excel file named `shopee_reviews_[timestamp].xlsx`.
 
 ---
 
-## 📊 คำอธิบายคอลัมน์ข้อมูล (Data Dictionary)
+## 🛠️ Repository File Structure
 
-### 1. ข้อมูลสินค้า (`shopee_products_...xlsx`)
-ไฟล์นี้เก็บรายการสินค้าทั้งหมดที่ดึงมาจากหน้าร้านค้า
-
-| ชื่อคอลัมน์ (Column) | คำอธิบาย |
+| Filename | Description |
 | :--- | :--- |
-| `shop_id` | รหัสร้านค้า (Shop ID) |
-| `product_id` | รหัสสินค้า (Product ID) |
-| `shop_name` | ชื่อร้านค้า |
-| `product_name` | ชื่อสินค้า |
-| `price` | ราคาสินค้า (บาท) |
-| `sold` | จำนวนที่ขายแล้ว (ชิ้น) |
-| `rating` | คะแนนเฉลี่ยของสินค้า (ดาว) |
-| `url` | ลิงก์ไปยังหน้าสินค้า |
-| `collected_at` | วันและเวลาที่ดึงข้อมูล |
+| `shopee-multi-product-scraper.ipynb` | Notebook for scraping products from Shop URLs (includes Excel save function). |
+| `shopee-reviews-scraper.ipynb` | Notebook for scraping reviews from Product URLs. |
 
-### 2. ข้อมูลรีวิว (`shopee_reviews_...xlsx`)
-ไฟล์นี้เก็บความคิดเห็นจากลูกค้าที่มีต่อสินค้า
+---
 
-| ชื่อคอลัมน์ (Column) | คำอธิบาย |
+## 📊 Data Dictionary
+
+### 1. Product Data (`shopee_products_...xlsx`)
+This file contains all product listings scraped from the shop page.
+
+| Column Name | Description |
 | :--- | :--- |
-| `shop_id` | รหัสร้านค้า |
-| `product_id` | รหัสสินค้า |
-| `shop_name` | ชื่อร้านค้า |
-| `product_name` | ชื่อสินค้า |
-| `user` | ชื่อผู้ใช้ที่รีวิว (Masked Username) |
-| `rating` | คะแนนรีวิวที่ลูกค้าให้ (1-5 ดาว) |
-| `date` | วันที่และเวลาที่ลูกค้ารีวิว |
-| `option` | ตัวเลือกสินค้าที่ลูกค้าซื้อ (เช่น สี, ขนาด) |
-| `comment` | ข้อความความคิดเห็น |
-| `collected_at` | วันและเวลาที่ดึงข้อมูล |
+| `shop_id` | Shop ID |
+| `product_id` | Product ID |
+| `shop_name` | Name of the Shop |
+| `product_name` | Name of the Product |
+| `price` | Product Price (THB) |
+| `sold` | Number of items sold |
+| `rating` | Average product rating (Stars) |
+| `url` | Link to the product page |
+| `collected_at` | Timestamp of data collection |
+
+### 2. Review Data (`shopee_reviews_...xlsx`)
+This file contains customer reviews for the products.
+
+| Column Name | Description |
+| :--- | :--- |
+| `shop_id` | Shop ID |
+| `product_id` | Product ID |
+| `shop_name` | Name of the Shop |
+| `product_name` | Name of the Product |
+| `user` | Reviewer's username (Masked) |
+| `rating` | Rating given by the customer (1-5 Stars) |
+| `date` | Date and time of the review |
+| `option` | Product variant purchased (e.g., Color, Size) |
+| `comment` | Review text |
+| `collected_at` | Timestamp of data collection |
