@@ -1,5 +1,7 @@
 # 🛍️ Shopee Multi-Scraper (Playwright/CDP)
 
+> **Last Updated:** 2025-12-15
+
 A Python tool for scraping data from Shopee Thailand using DOM/UI interaction combined with **Playwright** and Chrome DevTools Protocol (CDP) connection for speed and efficiency.
 
 This repository consists of two main scrapers:
@@ -21,7 +23,7 @@ This repository consists of two main scrapers:
 Install the required libraries using pip:
 
 ```bash
-pip install playwright pandas nest-asyncio
+pip install playwright pandas nest-asyncio openpyxl
 playwright install chromium
 ```
 
@@ -35,7 +37,7 @@ Choose one of the methods below to launch Chrome in the required mode:
 
 1.  Right-click on **Desktop → New → Shortcut**.
 2.  In the **Type the location of the item** field, paste the following line entirely:
-    ```
+    ```text
     "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --user-data-dir="C:\chrome_playwright_profile"
     ```
     *(Please verify that the path to chrome.exe is correct for your system)*.
@@ -48,7 +50,7 @@ Choose one of the methods below to launch Chrome in the required mode:
 
 1.  Open **Notepad**.
 2.  Paste the following content:
-    ```bash
+    ```batch
     @echo off
     "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --user-data-dir="C:\chrome_playwright_profile"
     ```
@@ -62,7 +64,7 @@ Choose one of the methods below to launch Chrome in the required mode:
 
 ## 🚀 Usage
 
-Since the files are **Jupyter Notebooks (.ipynb)**, it is recommended to open them using VS Code or Jupyter Notebook and run the cells sequentially.
+Since the scripts are provided as **Jupyter Notebooks (.ipynb)**, we recommend running them in **VS Code** or **Jupyter Lab** for an interactive experience.
 
 ### 1. 📋 Product Scraper (Scrape Items)
 
